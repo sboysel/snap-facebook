@@ -1,1 +1,1 @@
-from facebook import *
+from .facebook import *
