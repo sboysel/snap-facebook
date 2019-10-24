@@ -78,15 +78,15 @@ def load_nodes():
         # Add ego node if not already contained in network
         if not network.has_node(node_id):
             network.add_node(node_id)
-            network.node[node_id]['features'] = np.zeros(len(feature_index))
+            network.nodes[node_id]['features'] = np.zeros(len(feature_index))
         
         # parse ego node
         i = 0
         for line in featname_file:
             key, val = parse_featname_line(line)
             # Update feature value if necessary
-            if ego_features[i] + 1 > network.node[node_id]['features'][key]:
-                network.node[node_id]['features'][key] = ego_features[i] + 1
+            if ego_features[i] + 1 > network.nodes[node_id]['features'][key]:
+                network.nodes[node_id]['features'][key] = ego_features[i] + 1
             i += 1
 
         # parse neighboring nodes
@@ -99,14 +99,14 @@ def load_nodes():
             # Add node if not already contained in network
             if not network.has_node(node_id):
                 network.add_node(node_id)
-                network.node[node_id]['features'] = np.zeros(len(feature_index))
+                network.nodes[node_id]['features'] = np.zeros(len(feature_index))
 
             i = 0
             for line in featname_file:
                 key, val = parse_featname_line(line)
                 # Update feature value if necessary
-                if features[i] + 1 > network.node[node_id]['features'][key]:
-                    network.node[node_id]['features'][key] = features[i] + 1
+                if features[i] + 1 > network.nodes[node_id]['features'][key]:
+                    network.nodes[node_id]['features'][key] = features[i] + 1
                 i += 1
             
         featname_file.close()
@@ -140,7 +140,7 @@ def feature_matrix():
 
     X = np.zeros((n_nodes, n_features))
     for i,node in enumerate(network.nodes()):
-        X[i,:] = network.node[node]['features']
+        X[i,:] = network.nodes[node]['features']
 
     return X
 
@@ -149,7 +149,7 @@ def universal_feature(feature_index):
     Does every node have this feature?
 
     """
-    return len([x for x in network.nodes_iter() if network.node[x]['feautures'][feature_index] > 0]) // network.order() == 1
+    return len([x for x in network.nodes_iter() if network.nodes[x]['feautures'][feature_index] > 0]) // network.order() == 1
 
 if __name__ == '__main__':
     print("Running tests.")
